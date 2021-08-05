@@ -1,0 +1,13 @@
+{
+  "theme": {
+    "list": [
+      { "theme": "dark" },
+      {
+        "key": "dust",
+        "modifyVars": {
+          "@primary-color": "#F5222D"
+        }
+      }
+    ]
+  }
+}

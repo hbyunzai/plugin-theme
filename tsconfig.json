@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "./dist",
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "lib": [
+      "es2018",
+      "dom"
+    ],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "removeComments": true,
+    "strict": true,
+    "esModuleInterop": true
+  },
+  "include": [
+    "lib/**/*"
+  ],
+  "exclude": [
+    "node_modules/**/*",
+    "dist/**/*",
+    "test/**/*"
+  ]
+}
