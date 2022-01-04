@@ -1,6 +1,6 @@
 {
   "name": "ng-yunzai-plugin-theme",
-  "version": "13.0.1",
+  "version": "13.0.2",
   "bin": {
     "ng-yunzai-plugin-theme": "lib/index.js"
   },

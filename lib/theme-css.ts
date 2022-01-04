@@ -126,7 +126,7 @@ function genVar(config: ThemeCssConfig, item: ThemeCssItem): { [key: string]: st
   };
 }
 
-async function buildCss(options: BuildThemeCSSOptions): Promise<string> {
+async function buildCss(options: BuildThemeCSSOptions, config: ThemeCssConfig): Promise<string> {
   const plugins = [new LessPluginNpmImport({ prefix: '~' })];
   if (options.min === true) {
     plugins.push(new LessPluginCleanCSS({ advanced: true }));
@@ -136,6 +136,7 @@ async function buildCss(options: BuildThemeCSSOptions): Promise<string> {
       javascriptEnabled: true,
       plugins,
       paths: ['node_modules/'],
+      ...config.buildLessOptions,
       modifyVars: {
         ...options.modifyVars,
       },
@@ -166,7 +167,7 @@ export async function buildThemeCSS(config: ThemeCssConfig): Promise<void> {
     if (existsSync(item.filePath!)) {
       unlinkSync(item.filePath!);
     }
-    return buildCss(options).then(css => {
+    return buildCss(options, config).then(css => {
       writeFileSync(item.filePath!, css);
       console.log(`✅ Style '${item.key}' generated successfully. Output: ${item.filePath!}`);
     });
