@@ -34,7 +34,7 @@ describe('theme-css', () => {
     try {
       await buildThemeCSS({});
       expect(true).eq(true);
-    } catch (ex) {
+    } catch (ex: any) {
       expect(ex.message).eq(`Not found valid theme configuration`);
     }
   });

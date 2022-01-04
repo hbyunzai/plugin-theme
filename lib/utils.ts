@@ -1,4 +1,4 @@
-import { JsonParseMode, parseJson } from '@angular-devkit/core/src/json';
+import { ParseError, parse, printParseErrorCode } from 'jsonc-parser';
 import { readFileSync } from 'fs';
 import { Config } from './types';
 
@@ -32,7 +32,14 @@ export function deepMergeKey(original: any, ingoreArray: boolean, ...objects: an
 export function getJSON(jsonFile: string): any {
   const content = readFileSync(jsonFile, 'utf-8');
   try {
-    return parseJson(content, JsonParseMode.Loose);
+    const errors: ParseError[] = [];
+    const result = parse(content, errors, { allowTrailingComma: true });
+    if (errors.length) {
+      const { error, offset } = errors[0];
+      throw new Error(`Failed to parse "${jsonFile}" as JSON AST Object. ${printParseErrorCode(error)} at location: ${offset}.`);
+    }
+
+    return result;
   } catch (ex) {
     console.log(
       `Can't parse json file (${jsonFile}), pls check for comments or trailing commas, or validate json via https://jsonlint.com/`,
