@@ -24,6 +24,7 @@ async function buildLess(content: string, min = false): Promise<string> {
   const res = await less.render(content, {
     javascriptEnabled: true,
     plugins,
+    paths: ['node_modules/'],
   });
   return res.css;
 }

@@ -135,6 +135,7 @@ async function buildCss(options: BuildThemeCSSOptions): Promise<string> {
     .render(options.content, {
       javascriptEnabled: true,
       plugins,
+      paths: ['node_modules/'],
       modifyVars: {
         ...options.modifyVars,
       },
