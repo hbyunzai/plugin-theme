@@ -16,17 +16,18 @@ import { d } from './utils';
 const root = process.cwd();
 let nodeModulesPath = '';
 
-async function buildLess(content: string, min: boolean, options?: Less.Options): Promise<string> {
+async function buildLess(content: string, min: boolean, config: ColorLessConfig): Promise<string> {
   const plugins = [new LessPluginNpmImport({ prefix: '~' })];
   if (min) {
     plugins.push(new LessPluginCleanCSS({ advanced: true }));
   }
-  options = {
+  const options = {
     javascriptEnabled: true,
     plugins,
     paths: ['node_modules/'],
-    ...options,
+    ...config.buildLessOptions,
   };
+  if (config.debug) console.log(options);
   const res = await less.render(content, options);
   return res.css;
 }
@@ -134,11 +135,7 @@ async function getValidThemeVars(
   });
   // 利用 colors.less 生成
   const colorFileContent = combineLess(join(antdPath, './style/color/colors.less'));
-  const css = await buildLess(
-    `${colorFileContent}\n${varsContent.join('\n')}\n${themeVarsCss.reverse().join('\n')}`,
-    false,
-    config.buildLessOptions,
-  );
+  const css = await buildLess(`${colorFileContent}\n${varsContent.join('\n')}\n${themeVarsCss.reverse().join('\n')}`, false, config);
   const regex = /.(?=\S*['-])([.a-zA-Z0-9'-]+)\ {\n {2}color: (.*);/g;
   const themeCompiledVars = getMatches(css.replace(/(\/.*\/)/g, ''), regex);
   return { themeVars, randomColors, randomColorsVars, themeCompiledVars };
@@ -168,7 +165,7 @@ export async function generateTheme(config: ColorLessConfig): Promise<string> {
   `;
     d(config, `All vars`, allLessContent);
 
-    let css = await buildLess(allLessContent, false, config.buildLessOptions);
+    let css = await buildLess(allLessContent, false, config);
     // 3、根据 postcss 来清除非 color 部分
     css = await postcss([reducePlugin]).process(css).css;
     // 4、将随机颜色替换回相应的变量名
