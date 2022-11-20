@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ParseError, parse, printParseErrorCode } from 'jsonc-parser';
 import { readFileSync } from 'fs';
 import { Config } from './types';
@@ -5,7 +6,7 @@ import { Config } from './types';
 export function deepMergeKey(original: any, ingoreArray: boolean, ...objects: any[]): any {
   if (Array.isArray(original) || typeof original !== 'object') return original;
 
-  const isObject = (v: any) => typeof v === 'object' || typeof v === 'function';
+  const isObject = (v: unknown) => typeof v === 'object' || typeof v === 'function';
 
   const merge = (target: any, obj: any) => {
     Object.keys(obj)
@@ -48,7 +49,7 @@ export function getJSON(jsonFile: string): any {
   }
 }
 
-export function d(config: Config, message: string, data?: any): void {
+export function d(config: Config, message: string, data?: unknown): void {
   if (config.debug === true) {
     console.log(`[debug] ${message}`);
     if (data) {

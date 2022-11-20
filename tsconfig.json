@@ -9,9 +9,6 @@
       "es2018",
       "dom"
     ],
-    "typeRoots": [
-      "node_modules/@types"
-    ],
     "removeComments": true,
     "strict": true,
     "esModuleInterop": true

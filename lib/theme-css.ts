@@ -1,9 +1,8 @@
 import { join } from 'path';
 import { readFileSync, writeFileSync, existsSync, unlinkSync } from 'fs';
 import less from 'less';
-const LessPluginCleanCSS = require('less-plugin-clean-css');
-const LessPluginNpmImport = require('less-plugin-npm-import');
 const lessToJs = require('less-vars-to-js');
+const LessPluginCleanCSS = require('less-plugin-clean-css');
 
 import { ThemeCssItem, BuildThemeCSSOptions, ThemeCssConfig } from './theme-css.types';
 import { d, deepMergeKey } from './utils';
@@ -22,7 +21,7 @@ function fixConfig(config: ThemeCssConfig): ThemeCssConfig {
     } as ThemeCssConfig,
     true,
     config,
-  );
+    );
 
   const list: ThemeCssItem[] = [];
   config.list!.forEach(item => {
@@ -64,13 +63,13 @@ function genThemeVars(type: 'default' | 'dark' | 'compact', extraThemeVars: stri
       join(yelonSystem, 'system', `theme-${type}.less`),
       join(yelonSystem, 'layout-default', 'style', `theme-${type}.less`),
       join(yelonSystem, 'layout-blank', 'style', `theme-${type}.less`),
-    ].forEach(filePath => {
-      if (!existsSync(filePath)) {
-        console.warn(`主题路径 ${filePath} 不存在`);
-        return;
-      }
-      contents.push(readFileSync(filePath, 'utf-8'));
-    });
+      ].forEach(filePath => {
+        if (!existsSync(filePath)) {
+          console.warn(`主题路径 ${filePath} 不存在`);
+          return;
+        }
+        contents.push(readFileSync(filePath, 'utf-8'));
+      });
   }
   ['abc', 'chart','bis'].forEach(libName => {
     const libThemePath = join(yelonPath, libName, `theme-${type}.less`);
@@ -90,7 +89,7 @@ function genThemeVars(type: 'default' | 'dark' | 'compact', extraThemeVars: stri
         }
         return readFileSync(lessFilePath, 'utf-8');
       }),
-    );
+      );
   }
 
   return lessToJs(contents.join(''), {
@@ -100,6 +99,7 @@ function genThemeVars(type: 'default' | 'dark' | 'compact', extraThemeVars: stri
 }
 
 function genVar(config: ThemeCssConfig, item: ThemeCssItem): { [key: string]: string } {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
   const fileContent = item.projectThemeVar?.map(path => readFileSync(join(root, path), 'utf-8'))!;
   // add project theme
   fileContent.push(readFileSync(join(root, config.projectStylePath!), 'utf-8'));
@@ -127,21 +127,22 @@ function genVar(config: ThemeCssConfig, item: ThemeCssItem): { [key: string]: st
 }
 
 async function buildCss(options: BuildThemeCSSOptions, config: ThemeCssConfig): Promise<string> {
-  const plugins = [new LessPluginNpmImport({ prefix: '~' })];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const plugins: any[] = [];
   if (options.min === true) {
     plugins.push(new LessPluginCleanCSS({ advanced: true }));
   }
   return less
-    .render(options.content, {
-      javascriptEnabled: true,
-      plugins,
-      paths: ['node_modules/'],
-      ...config.buildLessOptions,
-      modifyVars: {
-        ...options.modifyVars,
-      },
-    })
-    .then(res => res.css);
+  .render(options.content, {
+    javascriptEnabled: true,
+    plugins,
+    paths: ['node_modules/'],
+    ...config.buildLessOptions,
+    modifyVars: {
+      ...options.modifyVars,
+    },
+  })
+  .then(res => res.css);
 }
 
 export async function buildThemeCSS(config: ThemeCssConfig): Promise<void> {
@@ -158,7 +159,7 @@ export async function buildThemeCSS(config: ThemeCssConfig): Promise<void> {
       // `@import '${join(node_modulesPath + 'ng-zorro-antd/style/color/colors.less')}'`,
       `@import '${config.projectStylePath}';`,
       ...config.additionalLibraries!.map(v => `@import '${v}';`),
-    ].join('');
+      ].join('');
     const options: BuildThemeCSSOptions = {
       min: config.min,
       content,

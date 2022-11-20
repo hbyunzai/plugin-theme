@@ -24,6 +24,10 @@ export interface ColorLessConfig extends Config {
    * Specify output file path, default: `./src/assets/color.less`
    */
   outputFilePath?: string;
+  /**
+  * Specify third-party libraries, default: `['@delon', 'ng-zorro-antd']`
+  */
+  thirdLibaryNames?: string[];
 }
 
 export interface ColorLessKV {

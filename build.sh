@@ -20,5 +20,5 @@ cp package.json dist/package.json
 cp README.md dist/README.md
 
 if [[ ${TEST} == true ]]; then
-  cp -fr dist/* ../ng-yunzai-themes/node_modules/ng-yunzai-plugin-theme
+  cp -fr dist/* ../ng-yunzai/node_modules/ng-yunzai-plugin-theme
 fi
