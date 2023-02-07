@@ -9,7 +9,7 @@ export interface ColorLessConfig extends Config {
    */
   variables?: string[];
   /**
-   * Specify the ng-zorro-antd directory, defualt: `./node_modules/ng-zorro-antd/`
+   * Specify the ng-zorro-antd directory, default: `./node_modules/ng-zorro-antd/`
    */
   ngZorroAntd?: string;
   /**
@@ -25,9 +25,9 @@ export interface ColorLessConfig extends Config {
    */
   outputFilePath?: string;
   /**
-  * Specify third-party libraries, default: `['@delon', 'ng-zorro-antd']`
+  * Specify third-party libraries, default: `['@yelon', 'ng-zorro-antd']`
   */
-  thirdLibaryNames?: string[];
+  thirdLibraryNames?: string[];
 }
 
 export interface ColorLessKV {

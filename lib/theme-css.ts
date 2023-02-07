@@ -21,7 +21,7 @@ function fixConfig(config: ThemeCssConfig): ThemeCssConfig {
     } as ThemeCssConfig,
     true,
     config,
-    );
+  );
 
   const list: ThemeCssItem[] = [];
   config.list!.forEach(item => {
@@ -63,13 +63,13 @@ function genThemeVars(type: 'default' | 'dark' | 'compact', extraThemeVars: stri
       join(yelonSystem, 'system', `theme-${type}.less`),
       join(yelonSystem, 'layout-default', 'style', `theme-${type}.less`),
       join(yelonSystem, 'layout-blank', 'style', `theme-${type}.less`),
-      ].forEach(filePath => {
-        if (!existsSync(filePath)) {
-          console.warn(`主题路径 ${filePath} 不存在`);
-          return;
-        }
-        contents.push(readFileSync(filePath, 'utf-8'));
-      });
+    ].forEach(filePath => {
+      if (!existsSync(filePath)) {
+        console.warn(`主题路径 ${filePath} 不存在`);
+        return;
+      }
+      contents.push(readFileSync(filePath, 'utf-8'));
+    });
   }
   ['abc', 'chart','bis'].forEach(libName => {
     const libThemePath = join(yelonPath, libName, `theme-${type}.less`);
@@ -89,7 +89,7 @@ function genThemeVars(type: 'default' | 'dark' | 'compact', extraThemeVars: stri
         }
         return readFileSync(lessFilePath, 'utf-8');
       }),
-      );
+    );
   }
 
   return lessToJs(contents.join(''), {
@@ -133,16 +133,16 @@ async function buildCss(options: BuildThemeCSSOptions, config: ThemeCssConfig): 
     plugins.push(new LessPluginCleanCSS({ advanced: true }));
   }
   return less
-  .render(options.content, {
-    javascriptEnabled: true,
-    plugins,
-    paths: ['node_modules/'],
-    ...config.buildLessOptions,
-    modifyVars: {
-      ...options.modifyVars,
-    },
-  })
-  .then(res => res.css);
+    .render(options.content, {
+      javascriptEnabled: true,
+      plugins,
+      paths: ['node_modules/'],
+      ...config.buildLessOptions,
+      modifyVars: {
+        ...options.modifyVars,
+      },
+    })
+    .then(res => res.css);
 }
 
 export async function buildThemeCSS(config: ThemeCssConfig): Promise<void> {
@@ -159,7 +159,7 @@ export async function buildThemeCSS(config: ThemeCssConfig): Promise<void> {
       // `@import '${join(node_modulesPath + 'ng-zorro-antd/style/color/colors.less')}'`,
       `@import '${config.projectStylePath}';`,
       ...config.additionalLibraries!.map(v => `@import '${v}';`),
-      ].join('');
+    ].join('');
     const options: BuildThemeCSSOptions = {
       min: config.min,
       content,

@@ -13,11 +13,11 @@ function fixConfig(config: ColorLessConfig): ColorLessConfig {
       styleFilePath: `./src/styles.less`,
       themeFilePath: `./src/styles/theme.less`,
       outputFilePath: `./src/assets/color.less`,
-      thirdLibaryNames: ['@yelon', 'ng-zorro-antd'],
+      thirdLibraryNames: ['@yelon', 'ng-zorro-antd'],
     } as ColorLessConfig,
     false,
     config,
-    );
+  );
 
   if (!Array.isArray(config.variables)) {
     config.variables = [];

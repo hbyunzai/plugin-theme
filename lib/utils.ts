@@ -3,7 +3,7 @@ import { ParseError, parse, printParseErrorCode } from 'jsonc-parser';
 import { readFileSync } from 'fs';
 import { Config } from './types';
 
-export function deepMergeKey(original: any, ingoreArray: boolean, ...objects: any[]): any {
+export function deepMergeKey(original: any, ignoreArray: boolean, ...objects: any[]): any {
   if (Array.isArray(original) || typeof original !== 'object') return original;
 
   const isObject = (v: unknown) => typeof v === 'object' || typeof v === 'function';
@@ -14,7 +14,7 @@ export function deepMergeKey(original: any, ingoreArray: boolean, ...objects: an
       .forEach(key => {
         const oldValue = obj[key];
         const newValue = target[key];
-        if (!ingoreArray && Array.isArray(newValue)) {
+        if (!ignoreArray && Array.isArray(newValue)) {
           target[key] = [...newValue, ...oldValue];
         } else if (oldValue != null && isObject(oldValue) && newValue != null && isObject(newValue)) {
           target[key] = merge(newValue, oldValue);

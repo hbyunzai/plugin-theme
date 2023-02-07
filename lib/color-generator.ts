@@ -27,8 +27,8 @@ async function buildLess(content: string, config: ColorLessConfig): Promise<stri
 }
 
 /**
-* 扁平化所有 less 文件
-*/
+ * 扁平化所有 less 文件
+ */
 function combineLess(filePath: string, config: ColorLessConfig): string {
   if (!existsSync(filePath)) {
     return '';
@@ -50,7 +50,7 @@ function combineLess(filePath: string, config: ColorLessConfig): string {
       importPath = importPath.replace(startKeys[startKeyIndex], '');
       newPath = join(nodeModulesPath, importPath);
     }
-    if (config.thirdLibaryNames != null && config.thirdLibaryNames.some(key => importPath.startsWith(key))) {
+    if (config.thirdLibraryNames != null && config.thirdLibraryNames.some(key => importPath.startsWith(key))) {
       newPath = join(nodeModulesPath, importPath);
     }
     return combineLess(newPath, config);
@@ -59,18 +59,18 @@ function combineLess(filePath: string, config: ColorLessConfig): string {
 }
 
 /*
-Generated random hex color code
-e.g. #fe12ee
+  Generated random hex color code
+  e.g. #fe12ee
 */
 function randomColor() {
-  return '#' + (0x1000000 + Math.random() * 0xffffff).toString(16).substr(1, 6);
+  return '#' + (0x1000000 + Math.random() * 0xffffff).toString(16).substring(1, 7);
 }
 
 /*
-This function take primary color palette name and returns @primary-color dependent value
-.e.g
-Input: @primary-1
-Output: color(~`colorPalette("@{primary-color}", ' 1 ')`)
+  This function take primary color palette name and returns @primary-color dependent value
+  .e.g
+  Input: @primary-1
+  Output: color(~`colorPalette("@{primary-color}", ' 1 ')`)
 */
 function getShade(varName: string) {
   const match = varName.match(/(.*)-(\d)/);
@@ -108,7 +108,7 @@ async function getValidThemeVars(
   variables: string[],
   antdPath: string,
   config: ColorLessConfig,
-  ): Promise<{ themeVars: string[]; randomColors: ColorLessKV; randomColorsVars: ColorLessKV; themeCompiledVars: ColorLessKV }> {
+): Promise<{ themeVars: string[]; randomColors: ColorLessKV; randomColorsVars: ColorLessKV; themeCompiledVars: ColorLessKV }> {
   const randomColors: ColorLessKV = {};
   const randomColorsVars: ColorLessKV = {};
   // 根据定制color重新生成一组随机颜色
@@ -162,7 +162,7 @@ export async function generateTheme(config: ColorLessConfig): Promise<string> {
     const allLessContent = `
     @import '${config.styleFilePath!}';
     ${varsCombined.join('\n')}
-    `;
+  `;
     d(config, 'All vars', allLessContent);
 
     let css = await buildLess(allLessContent, config);
@@ -215,22 +215,22 @@ export async function generateTheme(config: ColorLessConfig): Promise<string> {
 }
 
 /*
-This plugin will remove all css rules except those are related to colors
-e.g.
-Input:
-.body {
-font-family: 'Lato';
-background: #cccccc;
-color: #000;
-padding: 0;
-pargin: 0
-}
+ This plugin will remove all css rules except those are related to colors
+ e.g.
+ Input:
+ .body {
+    font-family: 'Lato';
+    background: #cccccc;
+    color: #000;
+    padding: 0;
+    pargin: 0
+ }
 
-Output:
-.body {
-background: #cccccc;
-color: #000;
-}
+ Output:
+  .body {
+    background: #cccccc;
+    color: #000;
+ }
 */
 const reducePlugin: () => Plugin = () => {
   const cleanRule = (rule: Rule) => {
@@ -243,16 +243,16 @@ const reducePlugin: () => Plugin = () => {
       /*
       this block causing https://github.com/ant-design/ant-design/issues/24777
       if (decl.prop !== 'background' && decl.prop.includes('background') && !decl.prop.match(/^background-(.*)color$/ig)) {
-      decl.remove();
-      matched = true;
+        decl.remove();
+        matched = true;
       }
       if (decl.prop !== 'border' && decl.prop.includes('border') && !decl.prop.match(/^border-(.*)color$/ig)) {
-      decl.remove();
-      matched = true;
+        decl.remove();
+        matched = true;
       }
       if (['transparent', 'inherit', 'none', '0'].includes(decl.value)) {
-      decl.remove();
-      matched = true;
+        decl.remove();
+        matched = true;
       }
       */
       if (
@@ -261,7 +261,7 @@ const reducePlugin: () => Plugin = () => {
         !decl.prop.includes('border') &&
         !decl.prop.includes('box-shadow') &&
         !Number.isNaN(decl.value)
-        ) {
+      ) {
         // if (!matched) decl.remove();
         decl.remove();
       } else {
@@ -284,7 +284,7 @@ const reducePlugin: () => Plugin = () => {
       css.walkComments(c => {
         c.remove();
       });
-      },
+    },
   };
 };
 
@@ -304,7 +304,7 @@ const cleanNoColorVarPlugin: () => Plugin = () => {
     postcssPlugin: 'cleanNoColorVarPlugin',
     Once: css => {
       css.walkRules(cleanRule);
-      },
+    },
   };
 };
 
@@ -315,20 +315,20 @@ function minifyCss(css: string) {
   /*
   Converts from
 
-  .abc,
-  .def {
-  color: red;
-  background: blue;
-  border: grey;
-  }
+    .abc,
+    .def {
+      color: red;
+      background: blue;
+      border: grey;
+    }
 
-  to
+    to
 
-  .abc,
-  .def {color: red;
-  background: blue;
-  border: grey;
-  }
+    .abc,
+    .def {color: red;
+      background: blue;
+      border: grey;
+    }
 
   */
   css = css.replace(/\{(\r\n?|\n)\s+/g, '{');
@@ -344,8 +344,8 @@ function minifyCss(css: string) {
 
   .abc,
   .def {color: red;
-  background: blue;
-  border: grey;}
+    background: blue;
+    border: grey;}
 
   */
   css = css.replace(/;(\r\n?|\n)\}/g, ';}');
@@ -355,8 +355,8 @@ function minifyCss(css: string) {
 
   .abc,
   .def {color: red;
-  background: blue;
-  border: grey;}
+    background: blue;
+    border: grey;}
 
   to
 
@@ -367,16 +367,16 @@ function minifyCss(css: string) {
   css = css.replace(/;(\r\n?|\n)\s+/g, ';');
 
   /*
-  Converts from
+Converts from
 
-  .abc,
-  .def {color: red;background: blue;border: grey;}
+.abc,
+.def {color: red;background: blue;border: grey;}
 
-  to
+to
 
-  .abc, .def {color: red;background: blue;border: grey;}
+.abc, .def {color: red;background: blue;border: grey;}
 
-  */
+*/
   css = css.replace(/,(\r\n?|\n)[.]/g, ', .');
   return css;
 }
