@@ -71,7 +71,7 @@ function genThemeVars(type: 'default' | 'dark' | 'compact', extraThemeVars: stri
       contents.push(readFileSync(filePath, 'utf-8'));
     });
   }
-  ['abc', 'chart','bis'].forEach(libName => {
+  ['abc', 'chart', 'bis', 'bcs'].forEach(libName => {
     const libThemePath = join(yelonPath, libName, `theme-${type}.less`);
     if (existsSync(libThemePath)) {
       contents.push(readFileSync(libThemePath, 'utf-8'));
