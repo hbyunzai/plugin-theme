@@ -16,7 +16,8 @@ const cli = meow({
     ng-yunzai-plugin-theme -t=themeCss -c=ng-yunzai.json
   Options
     -t, --type    Can be set 'themeCss', 'colorLess'
-    -c, --config  A filepath of NG-YUNZAI config script
+    -n, --name    Angular project name
+    -c, --config  A filepath of NG-ALAIN config script
     -d, --debug   Debug mode
   `,
   flags: {
@@ -24,6 +25,10 @@ const cli = meow({
       type: 'string',
       default: 'themeCss',
       alias: 't',
+    },
+    name: {
+      type: 'string',
+      alias: 'n',
     },
     config: {
       type: 'string',
@@ -53,13 +58,11 @@ try {
   process.exit(1);
 }
 
-if (cli.flags.debug === true) {
-  ['theme', 'colorLess'].forEach(key => {
-    const item = config[key] || {};
-    item.debug = true;
-    config[key] = item;
-  });
-}
+['theme', 'colorLess'].forEach(key => {
+  if (config[key] == null) config[key] = {};
+  config[key].name = cli.flags.name;
+  config[key].debug = cli.flags.debug === true;
+});
 
 if (cli.flags.type === 'themeCss') {
   buildThemeCSS(config.theme);

@@ -57,3 +57,12 @@ export function d(config: Config, message: string, data?: unknown): void {
     }
   }
 }
+
+export function mergePath(...args: string[]): string {
+  const res = args
+    .map(v => (v.startsWith('/') ? v.substring(1) : v))
+    .map(v => (v.endsWith('/') ? v.substring(0, v.length - 1) : v))
+    .join('/');
+
+  return res;
+}

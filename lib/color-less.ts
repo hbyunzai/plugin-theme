@@ -1,19 +1,29 @@
 import { ColorLessConfig } from './color-less.types';
-import { deepMergeKey } from './utils';
+import { deepMergeKey, getJSON } from './utils';
 import { generateTheme } from './color-generator';
 import { existsSync, unlinkSync } from 'fs';
+import { join } from 'path';
 
 const primaryColorVariable = '@primary-color';
+const root = process.cwd();
 
 function fixConfig(config: ColorLessConfig): ColorLessConfig {
+  let styleSourceRoot = 'src';
+  if (config.name) {
+    const angularJsonPath = join(root, 'angular.json');
+    const sourceRoot = getJSON(angularJsonPath)?.projects[config.name!].sourceRoot;
+    if (sourceRoot != null) {
+      styleSourceRoot = sourceRoot;
+    }
+  }
   config = deepMergeKey(
     {
       variables: [],
       ngZorroAntd: `./node_modules/ng-zorro-antd/`,
-      styleFilePath: `./src/styles.less`,
-      themeFilePath: `./src/styles/theme.less`,
-      outputFilePath: `./src/assets/color.less`,
-      thirdLibraryNames: ['@yelon', 'ng-zorro-antd'],
+      styleFilePath: `./${styleSourceRoot}/styles.less`,
+      themeFilePath: `./${styleSourceRoot}/styles/theme.less`,
+      outputFilePath: `./${styleSourceRoot}/assets/color.less`,
+      thirdLibaryNames: ['@yelon', 'ng-zorro-antd'],
     } as ColorLessConfig,
     false,
     config,

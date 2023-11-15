@@ -5,12 +5,21 @@ const lessToJs = require('less-vars-to-js');
 const LessPluginCleanCSS = require('less-plugin-clean-css');
 
 import { ThemeCssItem, BuildThemeCSSOptions, ThemeCssConfig } from './theme-css.types';
-import { d, deepMergeKey } from './utils';
+import { d, deepMergeKey, getJSON, mergePath } from './utils';
+
 
 const root = process.cwd();
 let node_modulesPath = '';
 
 function fixConfig(config: ThemeCssConfig): ThemeCssConfig {
+  let styleSourceRoot = 'src';
+  if (config.name) {
+    const angularJsonPath = join(root, 'angular.json');
+    const sourceRoot = getJSON(angularJsonPath)?.projects[config.name!].sourceRoot;
+    if (sourceRoot != null) {
+      styleSourceRoot = sourceRoot;
+    }
+  }
   config = deepMergeKey(
     {
       additionalLibraries: [],

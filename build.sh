@@ -13,7 +13,7 @@ for ARG in "$@"; do
   esac
 done
 
-$(npm bin)/tsc -d
+npx tsc -d
 
 cp LICENSE dist/LICENSE
 cp package.json dist/package.json
