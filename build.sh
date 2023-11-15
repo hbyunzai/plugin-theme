@@ -18,6 +18,7 @@ npx tsc -d
 cp LICENSE dist/LICENSE
 cp package.json dist/package.json
 cp README.md dist/README.md
+node ./fix.mjs
 
 if [[ ${TEST} == true ]]; then
   cp -fr dist/* ../ng-yunzai/node_modules/ng-yunzai-plugin-theme
