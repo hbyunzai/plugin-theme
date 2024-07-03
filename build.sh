@@ -21,5 +21,5 @@ cp README.md dist/README.md
 node ./fix.mjs
 
 if [[ ${TEST} == true ]]; then
-  cp -fr dist/* ../ng-yunzai/node_modules/ng-yunzai-plugin-theme
+  cp -fr dist/* ../yelon/node_modules/ng-yunzai-plugin-theme
 fi

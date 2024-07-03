@@ -17,14 +17,21 @@ let nodeModulesPath = '';
 
 async function buildLess(content: string, config: ColorLessConfig): Promise<string> {
   const options = {
-    javascriptEnabled: true,
-    paths: ['node_modules/'],
+    paths: [
+      join(root, 'node_modules/ng-zorro-antd/style/color'),
+      join(root, 'node_modules/@yelon/theme/system/mixins'),
+      join(root, 'node_modules'),
+    ],
     ...config.buildLessOptions,
   };
-  if (config.debug) console.log(options);
-  const res = await less.render(content, options);
-  return res.css;
+  try {
+    const res = await less.render(content, options);
+    return res.css;
+  } catch (ex) {
+    throw new Error(`Less build error: ${ex}`);
+  }
 }
+
 
 /**
  * 扁平化所有 less 文件
@@ -70,7 +77,7 @@ function randomColor() {
   This function take primary color palette name and returns @primary-color dependent value
   .e.g
   Input: @primary-1
-  Output: color(~`colorPalette("@{primary-color}", ' 1 ')`)
+  Output: color(colorPalette("@primary-color", ' 1 '))
 */
 function getShade(varName: string) {
   const match = varName.match(/(.*)-(\d)/);
@@ -80,7 +87,7 @@ function getShade(varName: string) {
   if (/primary-\d/.test(varName)) {
     className = '@primary-color';
   }
-  return 'color(~`colorPalette("@{' + className.replace('@', '') + '}", ' + match[2] + ')`)';
+  return 'color(colorPalette("@' + className.replace('@', '') + '", ' + match[2] + '))';
 }
 
 function generateColorMap(themeFilePath: string, config: ColorLessConfig): ColorLessKV {

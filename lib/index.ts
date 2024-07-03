@@ -17,7 +17,7 @@ const cli = meow({
   Options
     -t, --type    Can be set 'themeCss', 'colorLess'
     -n, --name    Angular project name
-    -c, --config  A filepath of NG-ALAIN config script
+    -c, --config  A filepath of NG-YUNZAI config script
     -d, --debug   Debug mode
   `,
   flags: {
